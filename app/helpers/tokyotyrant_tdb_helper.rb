@@ -1,0 +1,2 @@
+module TokyotyrantTdbHelper
+end
