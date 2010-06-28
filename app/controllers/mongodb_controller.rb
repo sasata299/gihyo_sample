@@ -13,7 +13,7 @@ class MongodbController < ApplicationController
   end
 
   def get
-    p User.all(:name => "太郎1")                           # 太郎1
+    p User.all(:name => /太郎1/)                           # 太郎1, 太郎2, 太郎3, 太郎4
     p User.all(:age => 20)                                 # 太郎2
 
     # interestにsoccerを含んでいるデータ
