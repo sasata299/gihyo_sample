@@ -1,0 +1,2 @@
+module MongodbHelper
+end
