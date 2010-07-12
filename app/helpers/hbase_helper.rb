@@ -1,0 +1,2 @@
+module HbaseHelper
+end
