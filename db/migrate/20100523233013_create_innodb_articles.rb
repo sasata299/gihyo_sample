@@ -1,15 +1,13 @@
-class CreateArticles < ActiveRecord::Migration
+class CreateInnodbArticles < ActiveRecord::Migration
   def self.up
-    create_table :articles do |t|
+    create_table :innodb_articles do |t|
       t.column :title, :string, :null => false
       t.column :body, :text, :null => false
-      t.column :delete_at, :datetime
-
       t.timestamps
     end
   end
 
   def self.down
-    drop_table :articles
+    drop_table :innodb_articles
   end
 end

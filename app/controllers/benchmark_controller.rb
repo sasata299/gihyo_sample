@@ -1,19 +1,44 @@
 class BenchmarkController < ApplicationController
-  def insert
-    articles = []
-    (1..1000000).each do |num|
-      articles << {
-        :title => "title_#{num}",
-        :body => "body_#{num}",
+  require 'benchmark'
+  require 'memcache'
+
+  def set
+    Benchmark.bm do |x|
+      x.report('myisam') {
+        1.upto(10000) do |num|
+          MyisamArticle.create(
+            :title => "title_#{num}",
+            :body => "body_#{num}"
+          )
+        end
       }
-
-      if articles.size > 1000
-        Article.create!(articles)
-        articles = []
-      end
+      x.report('innodb') {
+        1.upto(10000) do |num|
+          InnoArticle.create(
+            :title => "title_#{num}",
+            :body => "body_#{num}"
+          )
+        end
+      }
+      x.report('memcached') {
+        @memcache = MemCache.new('localhost:11211')
+        1.upto(10000) do |num|
+          @memcache[num] = {
+            :title => "title_#{num}",
+            :body => "body_#{num}"
+          }
+        end
+      }
+      x.report('TokyoTyrant') {
+        @tt = MemCache.new('localhost:1978')
+        1.upto(10000) do |num|
+          @tt[num] = {
+            :title => "title_#{num}",
+            :body => "body_#{num}"
+          }
+        end
+      }
     end
-
-    Article.create!(articles) unless articles.blank?
 
     render :text => 'finish'
   end
